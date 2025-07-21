@@ -1,0 +1,23 @@
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+.vs/
+*.user
+*.suo
+
+# Rider & VS Code
+.idea/
+.vscode/
+
+# ASP.NET artifacts
+*.db
+*.log
+*.cache
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+
+# Others
+*.vsidx
