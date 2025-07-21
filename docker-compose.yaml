@@ -46,7 +46,9 @@ services:
       - keycloak
 
   reports-api:
-    build: ./reports-api
+    build:
+      context: ./reports-api/BionicPro.ReportsApi
+      dockerfile: Dockerfile
     ports:
       - "5000:8080"
     depends_on:
