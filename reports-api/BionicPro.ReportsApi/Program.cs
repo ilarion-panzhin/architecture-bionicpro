@@ -22,28 +22,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ProtheticUserOnly", policy =>
+    options.AddPolicy("ProtheticOnly", policy =>
         policy.RequireClaim("roles", "prothetic_user"));
 });
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/reports", (ClaimsPrincipal user) =>
-{
-    var username = user.Identity?.Name ?? "unknown_user";
-
-    var mockReport = new
-    {
-        user = username,
-        generatedAt = DateTime.UtcNow,
-        signalStrength = new[] { 75, 80, 73 },
-        actuatorEvents = new[] { "flex", "extend", "hold" }
-    };
-
-    return Results.Ok(mockReport);
-}).RequireAuthorization("ProtheticUserOnly");
+app.MapControllers(); 
 
 app.Run();
