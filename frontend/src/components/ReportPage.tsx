@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 
 const ReportPage: React.FC = () => {
+  
   const { keycloak, initialized } = useKeycloak();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [report, setReport] = useState<string | null>(null);
 
   const downloadReport = async () => {
     if (!keycloak?.token) {
@@ -22,6 +24,17 @@ const ReportPage: React.FC = () => {
         }
       });
 
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError('Unauthorized: You do not have access to this report.');
+        } else {
+          setError(`Error: ${response.statusText}`);
+        }
+        return;
+      }
+
+      const data = await response.json();
+      setReport(data.message);
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -33,6 +46,12 @@ const ReportPage: React.FC = () => {
   if (!initialized) {
     return <div>Loading...</div>;
   }
+
+  console.log('Keycloak state:', {
+  initialized,
+  authenticated: keycloak?.authenticated,
+  token: !!keycloak?.token,
+});
 
   if (!keycloak.authenticated) {
     return (
@@ -65,6 +84,12 @@ const ReportPage: React.FC = () => {
         {error && (
           <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
             {error}
+          </div>
+        )}
+
+        {report && (
+          <div className="mt-4 p-4 bg-green-100 text-green-700 rounded">
+            {report}
           </div>
         )}
       </div>

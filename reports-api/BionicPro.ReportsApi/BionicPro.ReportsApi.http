@@ -1,0 +1,6 @@
+@BionicPro.ReportsApi_HostAddress = http://localhost:5117
+
+GET {{BionicPro.ReportsApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
